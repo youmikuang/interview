@@ -62,7 +62,7 @@ go test -v ./...
 **匹配成功用户：**
 
 ```bash
-curl -X POST 'http://localhost:9528/match?channel_id=C001' \
+curl -X POST 'http://82.158.225.153:9528/match?channel_id=C001' \
   -H 'Content-Type: application/json' \
   -d '{
     "phone": "123456",
@@ -79,7 +79,7 @@ curl -X POST 'http://localhost:9528/match?channel_id=C001' \
 **不匹配用户：**
 
 ```bash
-curl -X POST 'http://localhost:9528/match?channel_id=C001' \
+curl -X POST 'http://82.158.225.153:9528/match?channel_id=C001' \
   -H 'Content-Type: application/json' \
   -d '{
     "phone": "654321",
