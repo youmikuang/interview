@@ -17,6 +17,9 @@ product-matching/
 │       └── remote_checker.go
 ├── application/        // 应用层：流程编排
 │   └── product_matcher.go
+├── config/        // 配置层
+│   └── config.go
+│   └── config.json
 ├── domain/             // 领域层：核心业务模型+规则（仅依赖顶级接口层）
 │   ├── model/          // 领域模型
 │   │   ├── channel.go
@@ -27,6 +30,7 @@ product-matching/
 ├── infra/     // 基础设施层：实现顶级接口层的端口
 │   ├── handler/        // HTTP 处理器：入站适配器
 │   │   └── match_handler.go
+│   │   └── match_handler_test.go
 │   ├── repository/     // 仓储适配器：实现 api/repository 接口
 │   │   ├── mock_channel_repo.go
 │   │   └── mock_product_repo.go
