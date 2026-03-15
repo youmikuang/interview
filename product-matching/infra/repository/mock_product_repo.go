@@ -2,7 +2,9 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"product-matching/api/repository"
+	"product-matching/config"
 	"product-matching/domain/model"
 )
 
@@ -14,53 +16,34 @@ var _ repository.ProductRepository = (*MockProductRepo)(nil)
 
 // ListAllProducts 实现顶级接口方法
 func (m *MockProductRepo) ListAllProducts() ([]*model.Product, error) {
-	hasCarTrue := true
-	hasSocialTrue := true
-	return []*model.Product{
-		{
-			ID:   "P001",
-			Name: "汽车贷",
-			FilterRules: struct {
-				AgeMin          int
-				AgeMax          int
-				AllowedRegions  []string
-				HasCar          *bool
-				HasSocial       *bool
-				NeedRemoteCheck bool
-			}{
-				AgeMin:          20,
-				AgeMax:          50,
-				AllowedRegions:  []string{"北京", "天津"},
-				HasCar:          &hasCarTrue,
-				HasSocial:       nil,
-				NeedRemoteCheck: true,
-			},
-		},
-		{
-			ID:   "P002",
-			Name: "社保贷",
-			FilterRules: struct {
-				AgeMin          int
-				AgeMax          int
-				AllowedRegions  []string
-				HasCar          *bool
-				HasSocial       *bool
-				NeedRemoteCheck bool
-			}{
-				AgeMin:          22,
-				AgeMax:          60,
-				AllowedRegions:  []string{"北京", "上海"},
-				HasCar:          nil,
-				HasSocial:       &hasSocialTrue,
-				NeedRemoteCheck: false,
-			},
-		},
-	}, nil
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		return nil, fmt.Errorf("failed to load config: %w", err)
+	}
+
+	var products []*model.Product
+	for _, p := range cfg.Products {
+		product := &model.Product{
+			ID:   p.ID,
+			Name: p.Name,
+		}
+		product.FilterRules.AgeMin = p.FilterRules.AgeMin
+		product.FilterRules.AgeMax = p.FilterRules.AgeMax
+		product.FilterRules.AllowedRegions = p.FilterRules.AllowedRegions
+		product.FilterRules.HasCar = p.FilterRules.HasCar
+		product.FilterRules.HasSocial = p.FilterRules.HasSocial
+		product.FilterRules.NeedRemoteCheck = p.FilterRules.NeedRemoteCheck
+		products = append(products, product)
+	}
+	return products, nil
 }
 
 // GetProductByID 实现顶级接口方法
 func (m *MockProductRepo) GetProductByID(id string) (*model.Product, error) {
-	products, _ := m.ListAllProducts()
+	products, err := m.ListAllProducts()
+	if err != nil {
+		return nil, err
+	}
 	for _, p := range products {
 		if p.ID == id {
 			return p, nil

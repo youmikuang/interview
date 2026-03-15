@@ -2,7 +2,9 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"product-matching/api/repository"
+	"product-matching/config"
 	"product-matching/domain/model"
 )
 
@@ -14,27 +16,25 @@ var _ repository.ChannelRepository = (*MockChannelRepo)(nil)
 
 // GetChannelByID 实现顶级接口方法
 func (m *MockChannelRepo) GetChannelByID(id string) (*model.Channel, error) {
-	hasHouseTrue := true
-	if id == "C001" {
-		return &model.Channel{
-			ID:   "C001",
-			Name: "微信渠道",
-			FilterRules: struct {
-				AllowedProductIDs []string
-				UserAgeMin        int
-				UserAgeMax        int
-				AllowedRegions    []string
-				HasCarRequired    *bool
-				HasHouseRequired  *bool
-			}{
-				AllowedProductIDs: []string{"P001", "P002"},
-				UserAgeMin:        20,
-				UserAgeMax:        50,
-				AllowedRegions:    []string{"北京", "天津"},
-				HasCarRequired:    nil,
-				HasHouseRequired:  &hasHouseTrue,
-			},
-		}, nil
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		return nil, fmt.Errorf("failed to load config: %w", err)
+	}
+
+	for _, c := range cfg.Channels {
+		if c.ID == id {
+			channel := &model.Channel{
+				ID:   c.ID,
+				Name: c.Name,
+			}
+			channel.FilterRules.AllowedProductIDs = c.FilterRules.AllowedProductIDs
+			channel.FilterRules.UserAgeMin = c.FilterRules.UserAgeMin
+			channel.FilterRules.UserAgeMax = c.FilterRules.UserAgeMax
+			channel.FilterRules.AllowedRegions = c.FilterRules.AllowedRegions
+			channel.FilterRules.HasCarRequired = c.FilterRules.HasCarRequired
+			channel.FilterRules.HasHouseRequired = c.FilterRules.HasHouseRequired
+			return channel, nil
+		}
 	}
 	return nil, errors.New("channel not found")
 }

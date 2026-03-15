@@ -1,0 +1,42 @@
+{
+  "products": [
+    {
+      "id": "P001",
+      "name": "汽车贷",
+      "filterRules": {
+        "ageMin": 20,
+        "ageMax": 50,
+        "allowedRegions": ["北京", "天津"],
+        "hasCar": true,
+        "hasSocial": null,
+        "needRemoteCheck": true
+      }
+    },
+    {
+      "id": "P002",
+      "name": "社保贷",
+      "filterRules": {
+        "ageMin": 22,
+        "ageMax": 60,
+        "allowedRegions": ["北京", "上海"],
+        "hasCar": null,
+        "hasSocial": true,
+        "needRemoteCheck": false
+      }
+    }
+  ],
+  "channels": [
+    {
+      "id": "C001",
+      "name": "微信渠道",
+      "filterRules": {
+        "allowedProductIDs": ["P001", "P002"],
+        "userAgeMin": 20,
+        "userAgeMax": 50,
+        "allowedRegions": ["北京", "天津"],
+        "hasCarRequired": null,
+        "hasHouseRequired": true
+      }
+    }
+  ]
+}

@@ -79,6 +79,9 @@ go run main.go
 
 # 访问接口测试
 curl "http://127.0.0.1:9527/query?ip=103.62.49.170"
+
+# 生成可部署文件到 linux 中
+GOOS=linux GOARCH=amd64 go build -o ipquery ./
 ```
 
 返回结果示例：
