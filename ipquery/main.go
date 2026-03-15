@@ -18,6 +18,6 @@ func main() {
 	// 注册路由
 	http.HandleFunc("/query", handler.QueryIPHandler)
 
-	println("server start at :8080")
-	http.ListenAndServe(":8080", nil)
+	println("server start at :9527")
+	http.ListenAndServe(":9527", nil)
 }
